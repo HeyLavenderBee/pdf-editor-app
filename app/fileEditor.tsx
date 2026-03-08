@@ -14,11 +14,16 @@ import styles from './style';
 
 export default function Index() {
   const router = useRouter();
+
+  interface MyType {
+    id: number;
+    uri: string;
+  }
   
-  const [ selectedImage, setSelectedImage ] = useState("");
+  const [ selectedImage, setSelectedImage ] = useState<string | null>(null) //aceita string e null
+  const [ selectedImages, setSelectedImages ] = useState<MyType[] | null>(null);
   //const [ selectedDocument, setSelectedDocument ] = useState("");
   const [ docName, setDocName ] = useState("");
-  const [ selectedImages, setSelectedImages ] = useState([]);
   const [ fileName, setFileName ] = useState("");
   const [ pages, setPages ] = useState([]);
   const [ modalVisible, setModalVisible] = useState(false);
@@ -82,7 +87,7 @@ export default function Index() {
     }
   };
 
-  const convertToBase64 = async (uri) => {
+  const convertToBase64 = async (uri: string) => {
     try {
       const base64 = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingType.Base64,
@@ -99,7 +104,7 @@ export default function Index() {
       allowsEditing: true,
     })
     if(!result.canceled){
-      const base64Image = await convertToBase64(result.assets[0].uri);
+      const base64Image: string | null = await convertToBase64(result.assets[0].uri);
       setSelectedImage(base64Image);
       setSelectedImages([...selectedImages, {id: selectedImages.length, uri: base64Image}]);
       setSelectedImage(""); //clear the selectedImage const

@@ -4,16 +4,6 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 
 export default function RootLayout() {
-  /*
-     header: () => (
-          <SafeAreaView style={{height: 100}}>
-            <View style={styles.header}>
-              <Text>Página Inicial</Text>
-            </View>
-          </SafeAreaView>
-        ),
-  */
-
   return (
     <Stack
       screenOptions={{
@@ -28,7 +18,7 @@ export default function RootLayout() {
     }}>
       <StatusBar style="light" />
       <Stack.Screen name="home" options={{ title: "Editor de PDF" }} />
-      <Stack.Screen name="file_editor" options={{ title: 'Overview' }} />
+      <Stack.Screen name="file_editor" options={{ title: 'Nome do arquivo' }} />
     </Stack>
   );
 }

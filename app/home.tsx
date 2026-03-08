@@ -1,22 +1,41 @@
 import React, { useState } from "react";
+import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 import { useRouter, Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Alert, Button } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
+// Componentes da tela
+import { CreateFile } from "./createFile"; 
+import { FileList } from "./fileList";
+
+
 export default function Home() {
-    //const router = useRouter();
+    const [fileName, setFilename] = useState("");
 
     return(
         <View>
             <StatusBar style="auto" />
-                <View style={styles.fileCard}>
-                    <TouchableOpacity style={styles.fileEditButton}>
-                        <Link href="/file_editor">
-                            <Text style={{color:"white", textAlign: "center"}}>Editar</Text>
-                        </Link>
-                    </TouchableOpacity>
+            <SQLiteProvider
+                databaseName="pdfeditordatabase.db"
+                onInit={async (db) => {
+                    await db.execAsync(`
+                        CREATE TABLE IF NOT EXISTS file (
+                            idFile INTEGER PRIMARY KEY AUTOINCREMENT,
+                            name varchar(255) NOT NULL,
+                            creationDate TIMESTAMP NOT NULL,
+                            lastUpdated TIMESTAMP NOT NULL
+                        );
+                        PRAGMA journal_mode=WAL;
+                    `);
+                }}
+                options={{useNewConnection: false}}
+            >
+                <View style={styles.fileList}>
+                    <CreateFile />
+                    <FileList />
                 </View>
+            </SQLiteProvider>
         </View>
     );
 }
@@ -40,5 +59,9 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     margin: 10,
     backgroundColor: "#7f93aa",
+  },
+  fileList: {
+    width: "100%",
+    alignItems: "center",
   },
 })

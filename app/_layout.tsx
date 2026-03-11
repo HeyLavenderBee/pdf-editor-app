@@ -1,7 +1,6 @@
 import { Stack, useRouter } from "expo-router";
 import { Text, View, TouchableOpacity, StyleSheet, Image, Alert, FlatList, TextInput, Modal, Button } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 
 export default function RootLayout() {
   return (
@@ -16,9 +15,9 @@ export default function RootLayout() {
         },
         headerTintColor: '#fff'
     }}>
-      <StatusBar style="light" />
       <Stack.Screen name="home" options={{ title: "Editor de PDF" }} />
-      <Stack.Screen name="file_editor" options={{ title: 'Nome do arquivo' }} />
+      <Stack.Screen name="fileEditor" options={{ title: 'Nome do arquivo' }} />
+      <Stack.Screen name="[id]" options={{ title: 'Nome do arquivo' }} />
     </Stack>
   );
 }

@@ -3,18 +3,17 @@ import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 import { useRouter, Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet, TouchableOpacity, Alert, Button } from "react-native";
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Componentes da tela
-import { CreateFile } from "./createFile"; 
-import { FileList } from "./fileList";
-
+import CreateFile from "./createFile"; 
+import FileList from "./fileList";
+import FileEditing from "./[id]";
 
 export default function Home() {
     const [fileName, setFilename] = useState("");
 
     return(
-        <View>
+        <View style={{flex: 1, backgroundColor: "#202123"}}>
             <StatusBar style="auto" />
             <SQLiteProvider
                 databaseName="pdfeditordatabase.db"
@@ -25,6 +24,12 @@ export default function Home() {
                             name varchar(255) NOT NULL,
                             creationDate TIMESTAMP NOT NULL,
                             lastUpdated TIMESTAMP NOT NULL
+                        );
+                        CREATE TABLE IF NOT EXISTS page (
+                            idPage INTEGER PRIMARY KEY AUTOINCREMENT,
+                            content LONGBLOB,
+                            idFile int,
+                            FOREIGN KEY (idFile) REFERENCES file(idFile)
                         );
                         PRAGMA journal_mode=WAL;
                     `);
@@ -62,6 +67,7 @@ const styles = StyleSheet.create({
   },
   fileList: {
     width: "100%",
+    flex: 1,
     alignItems: "center",
   },
 })

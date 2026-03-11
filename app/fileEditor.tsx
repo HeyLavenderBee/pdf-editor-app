@@ -30,9 +30,6 @@ export default function Index() {
   const [ loading, setLoading] = useState(false);
   
   function getHTMLContent() {
-    for (let i = 0; i < pages.length - 1; i++){
-
-    }
     const docPages = pages.join('');
 
     return `

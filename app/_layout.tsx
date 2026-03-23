@@ -17,7 +17,7 @@ export default function RootLayout() {
     }}>
       <Stack.Screen name="home" options={{ title: "Editor de PDF" }} />
       <Stack.Screen name="fileEditor" options={{ title: 'Nome do arquivo' }} />
-      <Stack.Screen name="[id]" options={{ title: 'Nome do arquivo' }} />
+      <Stack.Screen name="file_editing/[id]" options={{ title: 'Nome do arquivo' }} />
     </Stack>
   );
 }

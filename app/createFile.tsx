@@ -45,7 +45,7 @@ const CreateFile = () => {
 
     const goToFileEditor = (idFile: number) => {
         router.push({
-            pathname: "/[id]",
+            pathname: "/file_editing/[id]",
             params: {
                 id: idFile
             },

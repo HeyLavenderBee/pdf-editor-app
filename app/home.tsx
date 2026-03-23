@@ -7,7 +7,7 @@ import { Text, View, StyleSheet, TouchableOpacity, Alert, Button } from "react-n
 // Componentes da tela
 import CreateFile from "./createFile"; 
 import FileList from "./fileList";
-import FileEditing from "./[id]";
+import FileEditing from "./file_editing/[id]";
 
 export default function Home() {
     const [fileName, setFilename] = useState("");

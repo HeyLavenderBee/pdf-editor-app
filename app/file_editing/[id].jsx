@@ -1,58 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocalSearchParams } from 'expo-router';
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
-import { useRouter, Link } from 'expo-router';
-import { Text, View, StyleSheet, TouchableOpacity, Alert, Image, FlatList } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from 'expo-file-system/legacy';
-import * as Print from 'expo-print';
-import * as Sharing from 'expo-sharing';
-import styles from "./style";
-
-const PageInsert = ({loadPages, id}) => {
-    const db = useSQLiteContext();
-    const [selectedImage, setSelectedImage] = useState("");
-
-    const convertToBase64 = async (uri: string) => {
-        try {
-            const base64 = await FileSystem.readAsStringAsync(uri, {
-                encoding: FileSystem.EncodingType.Base64,
-            });
-            return `data:image/jpeg;base64,${base64}`;
-        } catch (e) {
-            //console.error("Conversion failed", e);
-            return null;
-        }
-    };
-
-    const pickImageAsync = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
-        })
-        if(!result.canceled){
-            const base64Image: string | null = await convertToBase64(result.assets[0].uri);
-            setSelectedImage(base64Image);
-            setSelectedImage(""); //clear the selectedImage const
-            const newPageHTML = `<div class="page"><img src="${base64Image}" style="width: 100%; height: 100%;" /></div>`;
-            try{
-                await db.runAsync(
-                    "INSERT INTO page (content, idFile) VALUES (?, ?);",
-                    [base64Image, id]
-                );
-                Alert.alert("Página adicionada!");
-            } catch (error) {
-                Alert.alert("Erro", "Ocorreu um erro ao adicionar a página...");
-            } 
-            await loadPages();
-        }
-    }
-    return(
-        <TouchableOpacity style={styles.button} onPress={pickImageAsync}>
-            <Text>Adicionar página</Text>
-        </TouchableOpacity>
-    );
-}
+import { Text, View, StyleSheet, TouchableOpacity, Alert, Image, FlatList, Modal } from "react-native";
+import styles from "../style";
+import PageInsert from "./pageInsert";
+import DeletePageButton from "./deleteButton";
 
 const FileEditingContent = ({id}) => {
     const db = useSQLiteContext();
@@ -81,9 +33,7 @@ const FileEditingContent = ({id}) => {
                             source={{ uri: item.content }}
                             style={styles.image}
                         />
-                        <TouchableOpacity style={styles.deletePageButton}>
-                            <Text style={{textAlign: "center", margin: "auto"}}>X</Text>
-                        </TouchableOpacity>
+                        <DeletePageButton loadPages={loadPages} id={item.idPage}/>
                     </View>
                 )}
             />

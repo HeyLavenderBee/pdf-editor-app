@@ -32,7 +32,7 @@ const FileList = () => {
 
     const goToFileEditor = (idFile) => {
         router.push({
-            pathname: "/[id]",
+            pathname: "/file_editing/[id]",
             params: {
                 id: idFile
             },
